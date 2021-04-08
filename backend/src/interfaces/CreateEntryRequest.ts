@@ -3,6 +3,6 @@
  */
  export interface createEntryRequest {
     name: string
-    dueDate: string
+    entryDate: string
   }
   

@@ -12,5 +12,5 @@ export default {
     entryDate: { type: "string" },
     mood: { type: "integer", minimum: 0, maximum: 5 },
   },
-  required: ["name", "entryDate", "description"],
+  required: ["name", "entryDate"],
 } as const;
