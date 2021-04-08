@@ -1,7 +1,7 @@
 export default {
   type: "object",
   properties: {
-    name: {
+    headline: {
       type: "string",
       pattern: "^(?!s*$).+",
     },
@@ -12,5 +12,5 @@ export default {
     entryDate: { type: "string" },
     mood: { type: "integer", minimum: 0, maximum: 5 },
   },
-  required: ["name", "entryDate"],
+  required: ["headline", "entryDate"],
 } as const;
