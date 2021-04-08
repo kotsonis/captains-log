@@ -23,7 +23,7 @@ export default {
         Action: [
           'dynamodb:Query',
         ],
-        Resource: ["arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}"]
+        Resource: ["arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ENTRIES_TABLE}"]
     }
   ]
 }
