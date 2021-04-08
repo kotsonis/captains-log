@@ -18,7 +18,7 @@ const serverlessConfiguration: AWS = {
       webpackConfig: './webpack.config.js',
       includeModules: true,
     },
-    todoSecrets: "${ssm:/aws/reference/secretsmanager/log/app}",  
+    appSecrets: "${ssm:/aws/reference/secretsmanager/captains/app}",  
   },
   plugins: [
     'serverless-webpack',
@@ -38,10 +38,10 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      ENTRIES_TABLE: "${self:custom.todoSecrets.tableName}${self:provider.stage}", 
-      ENTRY_ID_INDEX: "${self:custom.todoSecrets.todoIndex}${self:provider.stage}",
-      ENTRIES_S3_BUCKET: "${self:custom.todoSecrets.s3Endpoint}${self:provider.stage}",
-      JWKS: "${self:custom.todoSecrets.jwksUrl}"
+      ENTRIES_TABLE: "${self:custom.appSecrets.tableName}${self:provider.stage}", 
+      ENTRY_ID_INDEX: "${self:custom.appSecrets.entryIndex}${self:provider.stage}",
+      ENTRIES_S3_BUCKET: "${self:custom.appSecrets.s3Endpoint}${self:provider.stage}",
+      JWKS: "${self:custom.appSecrets.jwksUrl}"
 
     },
     lambdaHashingVersion: '20201221',
