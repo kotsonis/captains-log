@@ -18,11 +18,10 @@ type ValidatedEventAPIGatewayProxyEvent<S> = Handler<ValidatedAPIGatewayProxyEve
 const createEntry: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   logger.info('Processing event: ', event)
   const id = uuid.v4()
-  const creationTime = new Date().toISOString()
   const user = getUserId(event)
   logger.info(`for user ${user}`)
   const parsedBody:createEntryRequest = <createEntryRequest> event.body
-
+  const creationTime = parsedBody.entryDate
   const newItem = {
     userId: user,
     entryId: id,
