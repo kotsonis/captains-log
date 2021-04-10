@@ -110,20 +110,20 @@ export async function updateItemStatus(sortKey: string, user: string, newStatus:
   return result
 }
 export async function updateItem(sortKey: string, user: string, newEntry: JournalEntry) {
-  var dbUpdateExpression = "SET #ts = :entryDate"
+  let dbUpdateExpression = "SET #ts = :entryDate"
   const dbExpressionAttributeValues = {
     ":entryDate": newEntry.entryDate
   }
   if(newEntry.hasOwnProperty('description')){
-    dbUpdateExpression = dbUpdateExpression.concat(', description = :desc')
+    dbUpdateExpression += ', description = :desc'
     dbExpressionAttributeValues[":desc"] = newEntry.description
   }
   if(newEntry.hasOwnProperty('headline')) {
-    dbUpdateExpression = dbUpdateExpression.concat(', name = :headline')
+    dbUpdateExpression += ', name = :headline'
     dbExpressionAttributeValues[":headline"] = newEntry.headline
   }
   if(newEntry.hasOwnProperty('mood')) {
-    dbUpdateExpression = dbUpdateExpression.concat(', mood = :m')
+    dbUpdateExpression += ', mood = :m'
     dbExpressionAttributeValues[":m"] = newEntry.mood
   }
   
