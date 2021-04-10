@@ -5,8 +5,8 @@ import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from "aws-l
 
 import { getUserId } from '@libs/getUserId';
 import type { FromSchema } from "json-schema-to-ts";
-import { getItem, updateItemStatus } from '@libs/database';
-
+import { getItem, updateItem } from '@libs/database';
+import {JournalEntry} from '@interfaces/JournalEntry'
 const logger = createLogger('updateEntry')
 
 // parse the event.body according to schema
@@ -35,9 +35,10 @@ const updateEntry: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (ev
       })
     }
   }
+  const newEntry = event.body as JournalEntry
   // update entry in database with attachment location
   const done = event.body.done;
-  const revisedEntryItem = updateItemStatus(journalEntry.Items[0].timestamp, user,done);
+  const revisedEntryItem = updateItem(journalEntry.Items[0].timestamp, user,newEntry);
   logger.info(`Revised Journal entry`, revisedEntryItem);
   // get an UploadURL for the client to store the image
 
