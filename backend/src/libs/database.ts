@@ -10,6 +10,7 @@ const docClient = new XAWS.DynamoDB.DocumentClient()
 
 const entriesTable = process.env.ENTRIES_TABLE
 const entryIndex = process.env.ENTRY_ID_INDEX
+const dateIndex = process.env.ENTRY_DATE_INDEX
 const bucketName = process.env.ENTRIES_S3_BUCKET
 
 export async function createItem(newItem: AWS.DynamoDB.DocumentClient.PutItemInput) {
@@ -21,9 +22,10 @@ export async function createItem(newItem: AWS.DynamoDB.DocumentClient.PutItemInp
 }
 
 export async function getItems(userId: string) {
-  logger.info(`searching in table ${entriesTable}`)
+  logger.info(`searching in table ${entriesTable} with index ${dateIndex}`)
   const result = await docClient.query({
     TableName: entriesTable,
+    IndexName: dateIndex,
     KeyConditionExpression: 'userId = :user',
     ExpressionAttributeValues: {
       ':user': userId
@@ -110,9 +112,9 @@ export async function updateItemStatus(sortKey: string, user: string, newStatus:
   return result
 }
 export async function updateItem(sortKey: string, user: string, newEntry: JournalEntry) {
-  let dbUpdateExpression = "SET #ts = :entryDate"
+  let dbUpdateExpression = "SET #ek = :entryDate"
   const dbAttributeNames = {
-    "#ts": "timestamp"
+    "#ek": "entryDate"
   }
   const dbExpressionAttributeValues = {
     ":entryDate": newEntry.entryDate

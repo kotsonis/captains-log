@@ -18,6 +18,10 @@ const EntriesTable = {
             AttributeName: "entryId",
             AttributeType: "S",
           },
+          {
+            AttributeName: "entryDate",
+            AttributeType: "S",
+          },
         ],
         KeySchema: [
           {
@@ -40,6 +44,22 @@ const EntriesTable = {
               },
               {
                 AttributeName: "entryId",
+                KeyType: "RANGE"
+              }
+            ],
+            Projection: {
+              ProjectionType: "ALL",
+            }
+          },
+          {
+            IndexName: "${self:provider.environment.ENTRY_DATE_INDEX}",
+            KeySchema: [
+              {
+                AttributeName: "userId",
+                KeyType: "HASH"
+              },
+              {
+                AttributeName: "entryDate",
                 KeyType: "RANGE"
               }
             ],

@@ -40,6 +40,7 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       ENTRIES_TABLE: "${self:custom.appSecrets.tableName}${self:provider.stage}", 
       ENTRY_ID_INDEX: "${self:custom.appSecrets.entryIndex}${self:provider.stage}",
+      ENTRY_DATE_INDEX: "${self:custom.appSecrets.tableName}bydate${self:provider.stage}",
       ENTRIES_S3_BUCKET: "${self:custom.appSecrets.s3Endpoint}${self:provider.stage}",
       JWKS: "${self:custom.appSecrets.jwksUrl}"
 
