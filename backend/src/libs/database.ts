@@ -125,9 +125,9 @@ export async function updateItem(sortKey: string, user: string, newEntry: Journa
     dbAttributeNames["#ds"] = "description"
   }
   if(newEntry.hasOwnProperty('headline')) {
-    dbUpdateExpression += ', #nm = :headline'
+    dbUpdateExpression += ', #hl = :headline'
     dbExpressionAttributeValues[":headline"] = newEntry.headline
-    dbAttributeNames["#nm"] = "name"
+    dbAttributeNames["#hl"] = "headline"
   }
   if(newEntry.hasOwnProperty('mood')) {
     dbUpdateExpression += ', #md = :m'
