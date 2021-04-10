@@ -1,13 +1,13 @@
 export default {
     type: "object",
     properties: {
-      name: { type: 'string' },
+      headline: { type: 'string' },
       description: {type: 'string'},
       entryDate: {type: 'string'},
       mood: {type: 'number'}
     },
     required: [
-      'name', 
+      'headline', 
       'description',
       'entryDate'
     ]

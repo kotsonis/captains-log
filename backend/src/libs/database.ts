@@ -1,9 +1,10 @@
 
 import * as AWS  from 'aws-sdk'
-
+import {JournalEntry} from '@interfaces/JournalEntry'
 import { createLogger } from '@libs/logger'
 const logger = createLogger('database')
 import { captureAWS } from "aws-xray-sdk-core";
+
 var XAWS = captureAWS(AWS);
 const docClient = new XAWS.DynamoDB.DocumentClient()
 
@@ -108,7 +109,34 @@ export async function updateItemStatus(sortKey: string, user: string, newStatus:
     .promise()
   return result
 }
-
+export async function updateItem(sortKey: string, user: string, newEntry: JournalEntry) {
+  const dbUpdateExpression = "SET timestamp =: entryDate"
+  if(newEntry.hasOwnProperty('description')){
+    dbUpdateExpression.concat(', description = :description')
+  }
+  if(newEntry.hasOwnProperty('headline')) {
+    dbUpdateExpression.concat(', name = :headline')
+  }
+  if(newEntry.hasOwnProperty('mood')) {
+    dbUpdateExpression.concat(', mood = :mood')
+  }
+  
+  var dbParams = {
+    TableName: entriesTable,
+    Key: {
+      userId: user,
+      timestamp: sortKey
+    },
+    UpdateExpression: dbUpdateExpression,
+    ExpressionAttributeValues:newEntry,
+    ReturnValues:"UPDATED_NEW"
+  }
+  logger.info('Getting ready to update database with these params')
+  logger.info(dbParams)
+  const result = await docClient.update(dbParams)
+    .promise()
+  return result
+}
 /**
  * delete a todo item from the database
  * @param sortKey - the timestamp
