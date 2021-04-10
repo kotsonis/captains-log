@@ -110,7 +110,7 @@ export async function updateItemStatus(sortKey: string, user: string, newStatus:
   return result
 }
 export async function updateItem(sortKey: string, user: string, newEntry: JournalEntry) {
-  const dbUpdateExpression = "SET timestamp = :entryDate"
+  const dbUpdateExpression = "SET #ts = :entryDate"
   const dbExpressionAttributeValues = {
     ":entryDate": newEntry.entryDate
   }
@@ -135,6 +135,9 @@ export async function updateItem(sortKey: string, user: string, newEntry: Journa
     },
     UpdateExpression: dbUpdateExpression,
     ExpressionAttributeValues:dbExpressionAttributeValues,
+    ExpressionAttributeNames:  {
+      "#ts": "timestamp"
+    },
     ReturnValues:"UPDATED_NEW"
   }
   logger.info('Getting ready to update database with these params')
