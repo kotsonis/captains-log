@@ -111,20 +111,26 @@ export async function updateItemStatus(sortKey: string, user: string, newStatus:
 }
 export async function updateItem(sortKey: string, user: string, newEntry: JournalEntry) {
   let dbUpdateExpression = "SET #ts = :entryDate"
+  const dbAttributeNames = {
+    "#ts": "timestamp"
+  }
   const dbExpressionAttributeValues = {
     ":entryDate": newEntry.entryDate
   }
   if(newEntry.hasOwnProperty('description')){
-    dbUpdateExpression += ', description = :desc'
+    dbUpdateExpression += ', #ds = :desc'
     dbExpressionAttributeValues[":desc"] = newEntry.description
+    dbAttributeNames["#ds"] = "description"
   }
   if(newEntry.hasOwnProperty('headline')) {
-    dbUpdateExpression += ', name = :headline'
+    dbUpdateExpression += ', #nm = :headline'
     dbExpressionAttributeValues[":headline"] = newEntry.headline
+    dbAttributeNames["#nm"] = "name"
   }
   if(newEntry.hasOwnProperty('mood')) {
-    dbUpdateExpression += ', mood = :m'
+    dbUpdateExpression += ', #md = :m'
     dbExpressionAttributeValues[":m"] = newEntry.mood
+    dbAttributeNames["#md"] = "mood"
   }
   
   var dbParams = {
@@ -135,9 +141,7 @@ export async function updateItem(sortKey: string, user: string, newEntry: Journa
     },
     UpdateExpression: dbUpdateExpression,
     ExpressionAttributeValues:dbExpressionAttributeValues,
-    ExpressionAttributeNames:  {
-      "#ts": "timestamp"
-    },
+    ExpressionAttributeNames:  dbAttributeNames,
     ReturnValues:"UPDATED_NEW"
   }
   logger.info('Getting ready to update database with these params')
