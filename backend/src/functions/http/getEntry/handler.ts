@@ -1,45 +1,39 @@
 import 'source-map-support/register';
 import { middyfy } from '@libs/lambda';
 import { createLogger } from '@libs/logger'
-import type { APIGatewayProxyEvent, APIGatewayProxyResult, Handler } from "aws-lambda"
-import * as uuid from 'uuid'
+import type { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from "aws-lambda"
 import { getUserId } from '@libs/getUserId';
-import type { FromSchema } from "json-schema-to-ts";
-import {createItem} from '@libs/database'
+import {getItem} from '@libs/database'
 
-const logger = createLogger('createEntry')
+const logger = createLogger('getEntry')
 
-import { createEntryRequest } from '@interfaces/createEntryRequest'
-import schema from './schema';
 
-type ValidatedAPIGatewayProxyEvent<S> = Omit<APIGatewayProxyEvent, 'body'> & { body: FromSchema<S> }
-type ValidatedEventAPIGatewayProxyEvent<S> = Handler<ValidatedAPIGatewayProxyEvent<S>, APIGatewayProxyResult>
 
-const createEntry: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const getEntry: APIGatewayProxyHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
   logger.info('Processing event: ', event)
-  const id = uuid.v4()
   const user = getUserId(event)
-  logger.info(`for user ${user}`)
-  const parsedBody:createEntryRequest = <createEntryRequest> event.body
-  const creationTime = parsedBody.entryDate
-  const newItem = {
-    userId: user,
-    entryId: id,
-    timestamp: creationTime,
-    mood: 2,
-    ...parsedBody
+  const entryId = event.pathParameters.entryId;
+  logger.info(`for user ${user}, entry ${entryId}`)
+  const todoQuery = await getItem(entryId, user);
+  if (todoQuery.Count === 0) {
+    logger.info(`Got invalid entryId ${entryId} for user ${user}`);
+    return {
+      statusCode: 404,
+      body: JSON.stringify({
+        error: "Journal entry does not exist",
+      }),
+    };
   }
-  logger.info('Ready to add item: ', newItem)
-  
-  await createItem(newItem);
-  
+  const journalEntry = todoQuery.Items[0]
   return {
     statusCode: 201,
     body: JSON.stringify({
-      item: newItem
+      item: journalEntry
     })
   }
 }
 
-export const main = middyfy(createEntry);
+export const main = middyfy(getEntry);
 
