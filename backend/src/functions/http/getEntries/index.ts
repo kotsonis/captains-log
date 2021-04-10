@@ -23,7 +23,9 @@ export default {
         Action: [
           'dynamodb:Query',
         ],
-        Resource: ["arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ENTRIES_TABLE}"]
+        Resource: [
+          "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ENTRIES_TABLE}",
+          "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.ENTRIES_TABLE}/index/${self:provider.environment.ENTRY_DATE_INDEX}"]
     }
   ]
 }
