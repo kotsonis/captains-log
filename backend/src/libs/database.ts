@@ -110,7 +110,7 @@ export async function updateItemStatus(sortKey: string, user: string, newStatus:
   return result
 }
 export async function updateItem(sortKey: string, user: string, newEntry: JournalEntry) {
-  const dbUpdateExpression = "SET timestamp =: entryDate"
+  const dbUpdateExpression = "SET timestamp = :entryDate"
   const dbExpressionAttributeValues = {
     ":entryDate": newEntry.entryDate
   }
