@@ -1,13 +1,17 @@
 import type { AWS } from '@serverless/typescript';
 
-import getEntries from '@functions/http/getEntries';
-import createEntry from '@functions/http/createEntry';
-import getSignedUrl from '@functions/http/getSignedUrl'
+import {
+  getEntries,
+  getEntry,
+  createEntry,
+  getSignedUrl,
+  deleteEntry,
+  updateEntry
+} from '@functions/index'
+
 import auth0Authorizer from '@functions/auth/auth0Authorizer'
 import {BucketPolicy, AttachmentsBucket} from '@resources/s3'
 import {EntriesTable} from '@resources/dynamoDb'
-import deleteEntry from '@functions/http/deleteEntry'
-import updateEntry from '@functions/http/updateEntry'
 
 const serverlessConfiguration: AWS = {
   service: 'captains-log',
@@ -50,6 +54,7 @@ const serverlessConfiguration: AWS = {
   // import the function via paths
   functions: { 
     getEntries,
+    getEntry,
     auth0Authorizer,
     createEntry,
     getSignedUrl,
