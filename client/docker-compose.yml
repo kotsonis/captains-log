@@ -2,7 +2,7 @@ version: "3.3"
 services:
   captains-log-client:
     build:
-        context: ./client
+        context: .
     image: $DOCKER_USERNAME/captains-log-client
     ports:
       - "8080"
