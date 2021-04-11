@@ -1,3 +1,4 @@
+sudo: required
 language: node_js
 node_js:
   - "lts/*"
@@ -32,11 +33,13 @@ jobs:
         - SERVICE_PATH="client"
       before_install:
         - docker -v && docker-compose -v
+        - curl -L https://goss.rocks/install | sudo sh
+
       install:
         - docker-compose -f docker-compose.yml build --parallel
       script:
-        - docker run $DOCKER_USERNAME/captains-log-client npm test
-        
+        - dgoss run $DOCKER_USERNAME/captains-log-client
+
       after_success:
         - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin ;
         - docker-compose -f docker-compose.yml push ;
