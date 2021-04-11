@@ -33,6 +33,7 @@ jobs:
         - SERVICE_PATH="client"
       before_install:
         - docker -v && docker-compose -v
+        - aws configure set default.region eu-central-1
         - curl -L https://goss.rocks/install | sudo sh
 
       install:
@@ -44,3 +45,14 @@ jobs:
         - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin ;
         - docker-compose -f docker-compose.yml push ;
         - fi
+      deploy:
+        provider: elasticbeanstalk
+        region: eu-central-1
+        app: captains-log-client-prebuilt$
+        env: captains-log-env
+        bucket-name: elasticbeanstalk-eu-central-1-$AWS_USER
+        bucket-path: captains-log-client-prebuilt$
+        on:
+          branch: aws_deployment
+        access_key_id: $AWS_ACCESS_KEY
+        secret_access_key: $AWS_SECRET_KEY
