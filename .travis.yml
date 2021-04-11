@@ -44,14 +44,16 @@ jobs:
       after_success:
         - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin ;
         - docker-compose -f docker-compose.yml push ;
+        - cd -
+        - cd ecs-deploy
         - fi
       deploy:
         provider: elasticbeanstalk
         region: eu-central-1
-        app: captains-log
-        env: captains-log-environment
+        app: captains-log-client
+        env: captains-log-client
         bucket-name: elasticbeanstalk-eu-central-1-$AWS_USER
-        bucket-path: captains-log
+        bucket-path: captains-log-client
         on:
           branch: main
         access_key_id: $AWS_ACCESS_KEY_ID

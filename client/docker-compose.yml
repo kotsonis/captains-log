@@ -5,4 +5,4 @@ services:
         context: .
     image: $DOCKER_USERNAME/captains-log-client
     ports:
-      - "8080"
+      - "80"
