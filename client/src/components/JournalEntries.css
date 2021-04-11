@@ -1,0 +1,23 @@
+.entryImage {
+    
+    display: block;
+    max-width:230px;
+    max-height:95px;
+    width: auto;
+    height: auto;
+
+}
+.entryHeadline {
+    font-weight: bold;
+    background-color: white;
+    color: blue;
+    text-decoration: double;
+}
+.entryDescription {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+    background-color: transparent;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
