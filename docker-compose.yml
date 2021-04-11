@@ -1,8 +1,8 @@
 version: "3.3"
 services:
-  captains-log-frontend:
+  captains-log-client:
     build:
-        context: ../frontend
-    image: $DOCKER_USERNAME/captains-log-frontend
+        context: ../client
+    image: $DOCKER_USERNAME/captains-log-client
     ports:
       - "8080"

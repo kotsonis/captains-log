@@ -1,6 +1,7 @@
 language: node_js
 node_js:
   - "lts/*"
+services: docker
 
 deploy_service_job: &DEPLOY_SERVICE_JOB
   cache:
@@ -15,10 +16,6 @@ deploy_service_job: &DEPLOY_SERVICE_JOB
     - travis_retry npm install
     - cd -
 
-  script:
-    - cd ${SERVICE_PATH}
-    - serverless deploy -s ${TRAVIS_BRANCH}
-    - cd -
 
 jobs:
   include:
@@ -26,3 +23,18 @@ jobs:
       name: "Deploy Backend API"
       env:
         - SERVICE_PATH="backend"
+      script:
+        - cd ${SERVICE_PATH}
+        - serverless deploy -s ${TRAVIS_BRANCH}
+        - cd -
+    - name: "Deploy Frontend"
+      env:
+        - SERVICE_PATH="client"
+      before_install:
+        - docker -v && docker-compose -v
+      install:
+        - docker-compose -f deployments/docker-compose.yml build --parallel
+      after_success:
+        - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin ;
+        - docker-compose -f docker-compose.yml push ;
+        - fi
