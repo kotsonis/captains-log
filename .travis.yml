@@ -34,6 +34,9 @@ jobs:
         - docker -v && docker-compose -v
       install:
         - docker-compose -f docker-compose.yml build --parallel
+      script:
+        - docker run $DOCKER_USERNAME/captains-log-client npm test
+        
       after_success:
         - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin ;
         - docker-compose -f docker-compose.yml push ;
