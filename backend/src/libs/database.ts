@@ -21,6 +21,11 @@ export async function createItem(newItem: AWS.DynamoDB.DocumentClient.PutItemInp
   return result
 }
 
+/**
+ * retrieve the Journal Entries of a user, order by EntryDate in descending order
+ * @param userId - the user for which to retrieve results
+ * @returns 
+ */
 export async function getItems(userId: string) {
   logger.info(`searching in table ${entriesTable} with index ${dateIndex}`)
   const result = await docClient.query({
@@ -30,6 +35,8 @@ export async function getItems(userId: string) {
     ExpressionAttributeValues: {
       ':user': userId
     },
+    ScanIndexForward: false   // return results in descending order (ie latest first)
+    
   }).promise()
   return result.Items
 }
