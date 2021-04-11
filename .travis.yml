@@ -34,6 +34,7 @@ jobs:
       before_install:
         - docker -v && docker-compose -v
         - curl -L https://goss.rocks/install | sudo sh
+        - cd ${SERVICE_PATH}
 
       install:
         - docker-compose -f docker-compose.yml build --parallel
