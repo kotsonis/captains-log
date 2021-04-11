@@ -47,10 +47,10 @@ jobs:
       deploy:
         provider: elasticbeanstalk
         region: eu-central-1
-        app: captains-log-client-prebuilt$
-        env: captains-log-env
+        app: captains-log
+        env: captains-log-environment
         bucket-name: elasticbeanstalk-eu-central-1-$AWS_USER
-        bucket-path: captains-log-client-prebuilt$
+        bucket-path: captains-log
         on:
           branch: main
         access_key_id: $AWS_ACCESS_KEY_ID
