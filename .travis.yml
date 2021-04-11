@@ -52,6 +52,6 @@ jobs:
         bucket-name: elasticbeanstalk-eu-central-1-$AWS_USER
         bucket-path: captains-log-client-prebuilt$
         on:
-          branch: aws_deployment
+          branch: main
         access_key_id: $AWS_ACCESS_KEY
         secret_access_key: $AWS_SECRET_KEY
