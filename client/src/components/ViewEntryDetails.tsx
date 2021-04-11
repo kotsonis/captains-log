@@ -92,7 +92,7 @@ export class ViewJournal extends React.PureComponent<
   }
 
   onEditButtonClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
-    this.props.history.push(`/entries/${this.state.entryId}/edit`)
+    this.props.history.push(`/entries/${this.state.entryId}/create`)
   }
     /*
     this.setState(prevState => ({
