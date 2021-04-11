@@ -33,7 +33,6 @@ jobs:
         - SERVICE_PATH="client"
       before_install:
         - docker -v && docker-compose -v
-        - aws configure set default.region eu-central-1
         - curl -L https://goss.rocks/install | sudo sh
 
       install:
