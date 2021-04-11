@@ -33,7 +33,7 @@ jobs:
       before_install:
         - docker -v && docker-compose -v
       install:
-        - docker-compose -f deployments/docker-compose.yml build --parallel
+        - docker-compose -f docker-compose.yml build --parallel
       after_success:
         - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin ;
         - docker-compose -f docker-compose.yml push ;
