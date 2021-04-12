@@ -85,6 +85,9 @@ The frontend connection information for the Api and Auth0 is located in [config.
 ## CI/CD setup
 We build out a CI/CD process using [Travis CI](https://travis-ci.org/) that automatically builds and deploys our serverless service to AWS and our fronted to AWS ElasticBeanstalk. To make development easier, our [.travis.yml](.travis.yml) script encapsulates the branch in the deployment, so that our `main` app is not affected by changes/features done in our `dev` branch.
 
+Both `Frontend` and `Backend` are deployed through Travis CI.\
+![Travis](images/travis_ci.png)
+
 To allow for serveless to deploy on our behalf on AWS, the `AWS_SECRET_ACCESS_KEY` and `AWS_ACCESS_KEY_ID` have to be stored in the settings of our travis repository.
 
 To allow for docker to publish on Docker Hub on our behalf, the `DOCKER_USERNAME` and `DOCKER_PASSWORD` have to be stored as well.
@@ -156,3 +159,34 @@ const s3 = new XAWS.S3({
 
 Once we deploy and use our service with X-Ray enabled, we can obtain a service map on the aws console as per below example:
 ![x-ray screenshot](images/AWS_Xray.png)
+
+## Running the Application
+
+### Frontend
+
+You can open the app at (http://captains-log-client.eba-eydjy9t2.eu-central-1.elasticbeanstalk.com/)
+
+to deploy, you need to modify [config.ts](client/src/config.ts) and change the `callbackUrl` to localhost as follows:
+```typescript
+export const authConfig = {
+  // TODO: Create an Auth0 application and copy values from it into this map
+  domain: 'dev-34hr4k13.eu.auth0.com',            // Auth0 domain
+  clientId: 'sz1ZcHoN0RtLoQJtubM3dNrRLB2uAQzR',          // Auth0 client id
+  callbackUrl: 'http://localhost:80/callback' // instead of 'http://captains-log-client.eba-eydjy9t2.eu-central-1.elasticbeanstalk.com/callback'
+}
+
+```
+
+and then run the following commands:
+```bash
+cd client
+docker build -t client .
+docker run -d -p 80:80 client
+```
+### Backend
+To deploy the backend, you would run the following commands:
+```bash
+cd backend
+npm i
+serverless deploy -v
+```
