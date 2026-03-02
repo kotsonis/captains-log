@@ -14,12 +14,11 @@ const logger = createLogger('getEntries')
  * @returns a JSON with all the items retrieved from db
  */
 const getEntries: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    // TODO: Get all TODO items for a current user
-    const userId = await getUserId(event);
+    const userId = getUserId(event);
     logger.info(`Retrieving TODO items for user ${userId}`);
     const entries = await getItems(userId);
     return {
-        statusCode: 201,
+        statusCode: 200,
         body: JSON.stringify({
             items: entries
         })

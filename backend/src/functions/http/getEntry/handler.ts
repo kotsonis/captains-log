@@ -28,7 +28,7 @@ const getEntry: APIGatewayProxyHandler = async (
   }
   const journalEntry = todoQuery.Items[0]
   return {
-    statusCode: 201,
+    statusCode: 200,
     body: JSON.stringify({
       item: journalEntry
     })
