@@ -12,7 +12,6 @@ const logger = createLogger('deleteEntries');
 const deleteEntries: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  // TODO: Get all Journal entries for a current user
   const user = getUserId(event);
   const entryId = event.pathParameters.entryId;
   logger.info(
