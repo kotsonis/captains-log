@@ -31,23 +31,25 @@ const deleteEntries: APIGatewayProxyHandler = async (
   }
 
   const journalEntry = todoQuery.Items[0]
+  const timestamp = journalEntry.timestamp
+
+  logger.info('Deleting entry and associated resources', journalEntry)
+
+  const deletePromises = []
+
+  // delete the todo entry
+  deletePromises.push(deleteItem(timestamp, user))
+
   // check if an S3 bucket was created for this item and delete if so
   if (journalEntry.hasOwnProperty('attachmentUrl')) {
     logger.info('will be deleting S3 bucket')
-    try {
-        deleteBucket(journalEntry.attachmentUrl)
-    } catch (e) {
-        logger.info('Delete s3: Got error',e)
-    }
+    deletePromises.push(deleteBucket(journalEntry.attachmentUrl))
   }
-  logger.info('database entry to delete', journalEntry)
-  // delete the todo entry
-  const timestamp = journalEntry.timestamp
 
   try {
-      deleteItem(timestamp, user)
+      await Promise.all(deletePromises)
   } catch (e) {
-      logger.info('Got error',e)
+      logger.info('Got error during deletion', e)
   }
   
   return {

@@ -37,7 +37,7 @@ const updateEntry: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (ev
   }
   const newEntry = event.body as JournalEntry
   // update entry in database with attachment location
-  const revisedEntryItem = updateItem(journalEntry.Items[0].timestamp, user,newEntry);
+  const revisedEntryItem = await updateItem(journalEntry.Items[0].timestamp, user,newEntry);
   logger.info(`Revised Journal entry`, revisedEntryItem);
   // get an UploadURL for the client to store the image
 
