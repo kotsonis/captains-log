@@ -11,7 +11,7 @@ import { JwtPayload } from '../../../auth/JwtPayload'
 // 'Authorization': `Bearer ${idToken}`
 //
 const jwksClient = require('jwks-rsa');
-// TODO: Provide a URL that can be used to download a certificate that can be used
+// Provide a URL that can be used to download a certificate that can be used
 const jwksUrl = process.env.JWKS
 const client = jwksClient({
   cache: true,
@@ -64,9 +64,6 @@ const auth0Authorizer = async (
 async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const token = getToken(authHeader)
   const jwt: Jwt = decode(token, { complete: true }) as Jwt
-  // TODO: Implement token verification
-  // You should implement it similarly to how it was implemented for the exercise for the lesson 5
-  // You can read more about how to do this here: https://auth0.com/blog/navigating-rs256-and-jwks/
   if (!jwt || !jwt.header || !jwt.header.kid) {
     throw new Error('invalid token');
   }
@@ -75,7 +72,7 @@ async function verifyToken(authHeader: string): Promise<JwtPayload> {
   const key = await client.getSigningKey(kid);
   const signingKey = key.getPublicKey();
   
-  return verify(token, signingKey) as JwtPayload
+  return verify(token, signingKey, { algorithms: ['RS256'] }) as JwtPayload
 }
 
 function getToken(authHeader: string): string {
