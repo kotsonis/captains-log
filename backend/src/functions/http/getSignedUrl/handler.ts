@@ -38,7 +38,7 @@ const getSignedUrl: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (e
   // update entry in database with attachment location
   const fname = event.body.file;
   const bucketKey = `${entryId}/${fname}`;
-  const revisedEntryItem = updateItemUrl(journalEntry.Items[0].timestamp, user,bucketKey);
+  const revisedEntryItem = await updateItemUrl(journalEntry.Items[0].timestamp, user,bucketKey);
   logger.info(`Revised TODO item`, revisedEntryItem);
   // get an UploadURL for the client to store the image
   const uploadUrl = getUploadUrl(bucketKey);
